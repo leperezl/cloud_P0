@@ -1,4 +1,9 @@
 from app import db
+from app import ma
+from app import api 
+from flask_login import UserMixin
+from flask_restful import Api, Resource
+
 
 class User(db.Model):
     id= db.Column(db.Integer, primary_key = True)
@@ -15,6 +20,17 @@ class Event(db.Model):
     fDate= db.Column(db.DateTime)
     presencial = db.Column(db.Boolean)
 
+
+class User_Schema(ma.Schema):
+    class Meta:
+        fields = ("id", "email", "password")
+
+user_schema = User_Schema()
+
+class ResourceOneUser(Resource):
+    def get(self, id_user):
+        user = User.query.get_or_404(id_user)
+        return user_schema.dump(user)
 
 
 
